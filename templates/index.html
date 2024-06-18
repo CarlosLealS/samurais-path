@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samurai's Path Destiny</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function submitComment(event) {
+            event.preventDefault();
+            const form = event.target;
+            fetch('/submit_comment', {
+                method: 'POST',
+                body: new FormData(form)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Bienvenido a Untrained Game Deployers</h1>
+    </header>
+    <main>
+        <div class="container">
+            <!-- Existing content -->
+            <section class="comments-section">
+                <h2>Deja tu comentario</h2>
+                <form class="comment-form" onsubmit="submitComment(event)">
+                    <label for="name">Nombre (opcional):</label>
+                    <input type="text" id="name" name="name" placeholder="Tu nombre o anónimo">
+                    
+                    <label for="rating">Puntuación:</label>
+                    <select id="rating" name="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    
+                    <label for="comment">Comentario:</label>
+                    <textarea id="comment" name="comment" rows="2" placeholder="Escribe tu comentario aquí..."></textarea>
+                    
+                    <button type="submit">Enviar</button>
+                </form>
+                <div class="comments-list">
+                    <h3>Comentarios Recientes</h3>
+                    {% for comment in comments %}
+                    <div class="comment">
+                        <p class="comment-name">{{ comment.name }}</p>
+                        <p>Puntuación: {{ comment.rating }}</p>
+                        <p>{{ comment.comment }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 Samurai's Path Destiny. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
